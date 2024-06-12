@@ -1,4 +1,4 @@
-# WikiArt Wallpaper GNOME
+# PinIt GNOME Extension
  GNOME Shell Extension to add your simle notes to the notification area.
  
 Click on tray icon, it will show up a dialog where you can input your notification title, message and optionally icon(default will be same as the extension icon).
