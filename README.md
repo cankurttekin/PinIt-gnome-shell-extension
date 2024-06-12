@@ -15,6 +15,8 @@ You can help with development by contributing code, testing on other GNOME versi
 
 # Screenshots
 ![Screenshot_1](/screenshots/tray.png)
+<br>
 ![Screenshot_2](/screenshots/dialog.png)
+<br>
 ![Screenshot_3](/screenshots/notifications.png)
 
