@@ -6,10 +6,14 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
-
+let PinIt;
 class Dialog {
     constructor() {
-        this._createDialog();
+        if (!Dialog.instance) {
+            this._createDialog();
+            Dialog.instance = this;
+        }
+        return Dialog.instance;
     }
 
     _createDialog() {
@@ -55,22 +59,19 @@ class Dialog {
 
         const iconNames = ['Pin', 'Calendar', 'Music', 'Information', 'Warning', 'Error'];
         const iconMapping = {
-                    'Pin': 'view-pin-symbolic',
-                    'Calendar': 'office-calendar-symbolic',
-                    'Music': 'emblem-music-symbolic',
-                    'Information': 'dialog-information-symbolic',
-                    'Warning': 'dialog-warning-symbolic',
-                    'Error': 'dialog-error-symbolic'
-                };
+            'Pin': 'view-pin-symbolic',
+            'Calendar': 'office-calendar-symbolic',
+            'Music': 'emblem-music-symbolic',
+            'Information': 'dialog-information-symbolic',
+            'Warning': 'dialog-warning-symbolic',
+            'Error': 'dialog-error-symbolic'
+        };
 
-        //this.selectedIcon = iconNames[0];
         this.selectedIcon = iconMapping['Pin'];
         iconNames.forEach(iconName => {
             let item = new PopupMenu.PopupMenuItem(iconName);
             item.connect('activate', () => {
                 this.selectedIcon = iconMapping[iconName];
-                //log(this.selectedIcon);
-                //log(iconMapping[iconName]);
                 this.iconDropdown.label = iconName;
             });
             this.iconMenu.addMenuItem(item);
@@ -120,7 +121,6 @@ class Dialog {
         let title = this.titleEntry.get_text();
         let message = this.messageEntry.get_text();
         let iconName = this.selectedIcon;
-        log(`Input title: ${title}, message: ${message}, icon: ${iconName}`);
         this._showNotification(title, message, iconName);
         this._destroyDialog();
     }
@@ -143,6 +143,7 @@ class Dialog {
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onComplete: () => {
                 this.dialogOverlay.destroy();
+                Dialog.instance = null; // Reset singleton instance
             }
         });
     }
@@ -175,19 +176,25 @@ class MyExtension {
     }
 
     disable() {
+        if (Dialog.instance) {
+            Dialog.instance._destroyDialog();
+        }
         this._panelButton.destroy();
     }
 }
 
 function init() {
-    return new MyExtension();
+    //return new MyExtension();
 }
 
 function enable() {
-    Me._extension = init();
-    Me._extension.enable();
+    PinIt = new MyExtension();
+    //Me._extension = init();
+    //Me._extension.enable();
 }
 
 function disable() {
-    Me._extension.disable();
+    //Me._extension.disable();
+    PinIt.disable();
+    PinIt = null;
 }
