@@ -1,0 +1,7 @@
+{
+    "uuid": "pinit@cankurttekin",
+    "name": "Pin It",
+    "description": "Adds simle note to the notification area.",
+    "shell-version": ["42", "44"],
+    "version": 1
+}

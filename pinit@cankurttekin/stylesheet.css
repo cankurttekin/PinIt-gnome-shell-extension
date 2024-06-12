@@ -1,0 +1,46 @@
+.dialog {
+    background-color: rgba(250, 250, 250, 1);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.dialog-entry {
+    margin-bottom: 10px;
+    width: 200px;
+}
+
+.dialog-dropdown {
+    margin-bottom: 10px;
+}
+
+.dialog-button {
+    background-color: #3b82f6;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+}
+
+.dialog-overlay {
+    background-color: rgba(0, 0, 0, 0);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.submit-button {
+    background-color: #3b82f6; /* Blue color for submit button */
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    margin-bottom: 5px; /* Add some space between buttons */
+}
+
+.cancel-button {
+    background-color: #dc2626; /* Red color for cancel button */
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+}
