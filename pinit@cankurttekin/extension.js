@@ -1,4 +1,4 @@
-const { St, Clutter, Gio, Shell } = imports.gi;
+const { St, Clutter, Gio, Shell, Gtk } = imports.gi;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const MessageTray = imports.ui.messageTray;
@@ -7,6 +7,7 @@ const PopupMenu = imports.ui.popupMenu;
 
 const Me = ExtensionUtils.getCurrentExtension();
 let PinIt;
+
 class Dialog {
     constructor() {
         if (!Dialog.instance) {
@@ -110,11 +111,34 @@ class Dialog {
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
         });
 
+        this._applyThemeStyles();
+        this._connectThemeChangeSignal();
+
         // Position the dialog at the top center
         this.dialogOverlay.set_position(
             Math.floor(Main.layoutManager.primaryMonitor.width / 2 - this.dialog.width / 2),
             50
         );
+    }
+
+    _applyThemeStyles() {
+        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+        const gtkTheme = settings.get_string('gtk-theme');
+
+        if (gtkTheme.includes('dark')) {
+            this.dialog.add_style_class_name('dialog-dark');
+            this.dialog.remove_style_class_name('dialog');
+        } else {
+            this.dialog.add_style_class_name('dialog');
+            this.dialog.remove_style_class_name('dialog-dark');
+        }
+    }
+
+    _connectThemeChangeSignal() {
+        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+        settings.connect('changed::gtk-theme', () => {
+            this._applyThemeStyles();
+        });
     }
 
     _onSubmit() {
@@ -198,3 +222,5 @@ function disable() {
     PinIt.disable();
     PinIt = null;
 }
+
+
