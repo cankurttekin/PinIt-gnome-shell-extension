@@ -1,4 +1,4 @@
-const { St, Clutter, Gio, Shell, Gtk } = imports.gi;
+const { St, Clutter, Gio, Shell } = imports.gi;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const MessageTray = imports.ui.messageTray;
@@ -222,5 +222,4 @@ function disable() {
     PinIt.disable();
     PinIt = null;
 }
-
 
