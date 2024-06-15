@@ -1,11 +1,13 @@
-const { St, Clutter, Gio, Shell } = imports.gi;
-const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
-const MessageTray = imports.ui.messageTray;
-const ExtensionUtils = imports.misc.extensionUtils;
-const PopupMenu = imports.ui.popupMenu;
+import St from "gi://St";
+import Gio from "gi://Gio";
+import Clutter from "gi://Clutter";
 
-const Me = ExtensionUtils.getCurrentExtension();
+import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
+import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
+import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
+
 let PinIt;
 
 class Dialog {
@@ -54,8 +56,9 @@ class Dialog {
             can_focus: true,
         });
 
-        this.iconMenu = new PopupMenu.PopupMenu(this.iconDropdown, 0.5, St.Side.TOP, 0);
-        Main.uiGroup.add_actor(this.iconMenu.actor);
+        // Create a new popup menu for the icon dropdown
+        this.iconMenu = new PopupMenu.PopupMenu(this.iconDropdown, 0.5, St.Side.TOP);
+        Main.layoutManager.addChrome(this.iconMenu.actor);
         this.iconMenu.actor.hide();
 
         const iconNames = ['Pin', 'Calendar', 'Music', 'Information', 'Warning', 'Error'];
@@ -123,8 +126,8 @@ class Dialog {
 
     _applyThemeStyles() {
         const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
-        const gtkTheme = settings.get_string('gtk-theme');
-
+        const gtkTheme = settings.get_string('color-scheme');
+        log(gtkTheme);
         if (gtkTheme.includes('dark')) {
             this.dialog.add_style_class_name('dialog-dark');
             this.dialog.remove_style_class_name('dialog');
@@ -150,14 +153,19 @@ class Dialog {
     }
 
     _showNotification(title, message, iconName) {
-        let source = new MessageTray.Source(Me.metadata.name, iconName);
-        Main.messageTray.add(source);
-
+        let extensionObject = Extension.lookupByUUID('pinit@cankurttekin');
         let notificationIcon = new Gio.ThemedIcon({ name: iconName });
 
-        let notification = new MessageTray.Notification(source, title, message, { gicon: notificationIcon });
-        notification.setTransient(true);
-        source.showNotification(notification);
+        let source = MessageTray.getSystemSource();
+        let notification = new MessageTray.Notification({
+            source: source,
+            title: title,
+            body: message,
+            gicon: notificationIcon,
+            isTransient: true,
+            urgency: MessageTray.Urgency.LOW,
+        });
+        source.addNotification(notification);
     }
 
     _destroyDialog() {
@@ -173,15 +181,11 @@ class Dialog {
     }
 }
 
-class MyExtension {
-    constructor() {
-        this._init();
-    }
-
-    _init() {
+export default class MyExtension extends Extension {
+    enable() {
         this._panelButton = new PanelMenu.Button(0.0, 'MyExtension', false);
 
-        let icon = new St.Icon({
+        const icon = new St.Icon({
             gicon: new Gio.ThemedIcon({ name: 'view-pin-symbolic' }),
             style_class: 'system-status-icon',
         });
@@ -191,35 +195,16 @@ class MyExtension {
         Main.panel.addToStatusArea('MyExtension', this._panelButton);
     }
 
-    _showDialog() {
-        new Dialog();
-    }
-
-    enable() {
-        // Extension enable hook
-    }
-
     disable() {
         if (Dialog.instance) {
             Dialog.instance._destroyDialog();
+            Dialog.instance = null;
         }
         this._panelButton.destroy();
+        this._panelButton = null;
+    }
+
+    _showDialog() {
+        new Dialog();
     }
 }
-
-function init() {
-    //return new MyExtension();
-}
-
-function enable() {
-    PinIt = new MyExtension();
-    //Me._extension = init();
-    //Me._extension.enable();
-}
-
-function disable() {
-    //Me._extension.disable();
-    PinIt.disable();
-    PinIt = null;
-}
-
