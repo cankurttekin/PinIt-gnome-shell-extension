@@ -10,7 +10,8 @@ Click on tray icon, it will show up a dialog where you can input your notificati
 [<img src="/resources/get_it_on_gnome_extensions.png">](https://extensions.gnome.org/extension/7083/pin-it/)
 
 _Important: This extension does not log your notifications to a file; do not put information that you would care if it's lost._
-
+<br>
+_Due to the limit on the GNOME Shell, only the 3 most recent notifications are shown by per app([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list))._
 ## Version
 
 This extension supports GNOME Shell `3.4?` to `46`
