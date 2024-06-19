@@ -11,14 +11,14 @@ Click on tray icon, it will show up a dialog where you can input your notificati
 
 _Important: This extension does not log your notifications to a file; do not put information that you would care if it's lost._
 <br>
-_Due to the limit on the GNOME Shell, only the 3 most recent notifications are shown by per app([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list))._
+_Due to the limit on the GNOME Shell, only the 3 most recent notifications are shown for every app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list))._
 ## Version
 
 This extension supports GNOME Shell `3.4?` to `46`
 
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| master                  |    5  | GNOME 45 & 46          |
+| master                  |    6  | GNOME 45 & 46          |
 | gnome-shell-before-45   |    4  | GNOME 3.4 -> 44        |
 
 _Tested on GNOME 42 & 46._
