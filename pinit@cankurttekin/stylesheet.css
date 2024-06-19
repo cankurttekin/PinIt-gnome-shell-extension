@@ -42,10 +42,13 @@
 
 .submit-button {
     background-color: rgb(53, 132, 228); /* Blue color for submit button */
-    border-radius: 12px;
-    padding: 5px 10px;
+    border-radius: 300px;
+    padding: 15px 10px;
     color: white;
-    margin-left: 270px;
+    margin-top: 10px;
+    font-weight: bold;
+    margin-left: 125px;
+    margin-right: 125px;
 }
 
 .submit-button:hover {
@@ -75,15 +78,11 @@
 }
 
 
-
-.dialog-buttons-box {
-    margin-top: 15px;
-}
-
-
 .pinit-extension.icon-button {
-  margin: 5px;
-  margin-bottom: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  margin-top: 0px;
 }
 
 .icon-button.selected-icon {
