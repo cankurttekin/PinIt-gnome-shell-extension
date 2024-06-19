@@ -6,9 +6,6 @@ import { Extension, gettext as _ } from 'resource:///org/gnome/shell/extensions/
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
-import * as PopupMenu from "resource:///org/gnome/shell/ui/popupMenu.js";
-
-let PinIt;
 
 class Dialog {
     constructor() {
@@ -42,47 +39,53 @@ class Dialog {
             style_class: 'dialog-entry',
             can_focus: true,
             hint_text: "Title",
+            track_hover: true
         });
 
         this.messageEntry = new St.Entry({
             style_class: 'dialog-entry',
             can_focus: true,
             hint_text: "Message",
+            track_hover: true
         });
 
-        this.iconDropdown = new St.Button({
-            label: "Choose icon",
-            style_class: 'dialog-dropdown',
-            can_focus: true,
+        // Create a box layout to hold icons
+        this.iconBox = new St.BoxLayout({
+            style_class: 'icon-box',
+            vertical: false,  // Horizontal layout
+            reactive: true,
+            track_hover: true,
         });
 
-        // Create a new popup menu for the icon dropdown
-        this.iconMenu = new PopupMenu.PopupMenu(this.iconDropdown, 0.5, St.Side.TOP);
-        Main.layoutManager.addChrome(this.iconMenu.actor);
-        this.iconMenu.actor.hide();
-
-        const iconNames = ['Pin', 'Calendar', 'Music', 'Information', 'Warning', 'Error'];
+        const iconNames = ['Pin', 'Calendar', 'Music', 'Alarm', 'Information', 'Warning', 'Error'];
         const iconMapping = {
             'Pin': 'view-pin-symbolic',
-            'Calendar': 'office-calendar-symbolic',
+            'Calendar': 'x-office-calendar-symbolic',
             'Music': 'emblem-music-symbolic',
+            'Alarm': 'alarm-symbolic',
             'Information': 'dialog-information-symbolic',
             'Warning': 'dialog-warning-symbolic',
             'Error': 'dialog-error-symbolic'
         };
 
         this.selectedIcon = iconMapping['Pin'];
-        iconNames.forEach(iconName => {
-            let item = new PopupMenu.PopupMenuItem(iconName);
-            item.connect('activate', () => {
-                this.selectedIcon = iconMapping[iconName];
-                this.iconDropdown.label = iconName;
-            });
-            this.iconMenu.addMenuItem(item);
-        });
 
-        this.iconDropdown.connect('button-press-event', () => {
-            this.iconMenu.toggle();
+        // Create icon buttons and add them to the box layout
+        iconNames.forEach(iconName => {
+            let iconButton = new St.Button({
+                style_class: 'pinit-extension icon-button',
+                child: new St.Icon({
+                    gicon: Gio.icon_new_for_string(iconMapping[iconName]),
+                    style_class: 'icon',
+                }),
+            });
+
+            iconButton.connect('clicked', () => {
+                this.selectedIcon = iconMapping[iconName];
+                this._updateSelectedIcon(iconButton);
+            });
+
+            this.iconBox.add_child(iconButton);
         });
 
         this.submitButton = new St.Button({
@@ -92,18 +95,11 @@ class Dialog {
 
         this.submitButton.connect('clicked', this._onSubmit.bind(this));
 
-        this.cancelButton = new St.Button({
-            label: "Cancel",
-            style_class: 'dialog-button cancel-button',
-        });
-
-        this.cancelButton.connect('clicked', this._destroyDialog.bind(this));
-
+this.dialog.add_child(this.iconBox); // Add the icon box instead of dropdown
         this.dialog.add_child(this.titleEntry);
         this.dialog.add_child(this.messageEntry);
-        this.dialog.add_child(this.iconDropdown);
+        
         this.dialog.add_child(this.submitButton);
-        this.dialog.add_child(this.cancelButton);
         this.dialogOverlay.add_child(this.dialog);
 
         Main.layoutManager.addChrome(this.dialogOverlay);
@@ -116,12 +112,22 @@ class Dialog {
 
         this._applyThemeStyles();
         this._connectThemeChangeSignal();
-
+        
         // Position the dialog at the top center
         this.dialogOverlay.set_position(
             Math.floor(Main.layoutManager.primaryMonitor.width / 2 - this.dialog.width / 2),
             50
         );
+        
+        global.stage.connect('captured-event', (actor, event) => {
+        // Check if the event happened outside of the dialog
+        if (event.type() === Clutter.EventType.BUTTON_PRESS) {
+            let [x, y] = event.get_coords();
+            if (!this.dialog.contains(global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x, y))) {
+                this._destroyDialog();
+            }
+        }
+    });
     }
 
     _applyThemeStyles() {
@@ -143,13 +149,23 @@ class Dialog {
             this._applyThemeStyles();
         });
     }
-
+    
     _onSubmit() {
         let title = this.titleEntry.get_text();
         let message = this.messageEntry.get_text();
         let iconName = this.selectedIcon;
         this._showNotification(title, message, iconName);
         this._destroyDialog();
+    }
+
+    _updateSelectedIcon(selectedButton) {
+        // Remove selection class from all buttons
+        this.iconBox.get_children().forEach(button => {
+            button.remove_style_class_name('selected-icon');
+        });
+
+        // Add selection class to the clicked button
+        selectedButton.add_style_class_name('selected-icon');
     }
 
     _showNotification(title, message, iconName) {
@@ -208,3 +224,4 @@ export default class MyExtension extends Extension {
         new Dialog();
     }
 }
+

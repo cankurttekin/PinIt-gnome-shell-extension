@@ -1,13 +1,17 @@
 .dialog {
     background-color: rgb(245, 245, 245);
-    border-radius: 30px;
+    border-radius: 22px;
     padding: 15px;
+    border: 1px solid rgb(227, 227, 227); /* Add gray border to match default gnome popups */
+    min-width: 300px; 
 }
 
 .dialog-dark {
-    background-color: rgba(36, 36, 36, 1);
-    border-radius: 30px;
+    background-color: rgb(53, 53, 53);
+    border-radius: 22px;
     padding: 15px;
+    border: 1px solid rgb(66, 66, 66); /* Add gray border to match default gnome popups */
+    min-width: 300px;
 }
 
 .dialog-entry {
@@ -41,7 +45,7 @@
     border-radius: 12px;
     padding: 5px 10px;
     color: white;
-    margin-bottom: 5px; /* Add some space between buttons */
+    margin-left: 270px;
 }
 
 .submit-button:hover {
@@ -55,6 +59,34 @@
     color: rgb(39, 39, 39);
 }
 
+.cancel-button-dark {
+    background-color: rgb(71, 71, 71); /*  */
+    border-radius: 12px;
+    padding: 5px 10px;
+    color: rgb(253, 253, 253);
+}
+
 .cancel-button:hover {
   background-color: rgb(210, 210, 210);
+}
+
+.cancel-button-dark:hover {
+  background-color: rgb(81, 81, 81);
+}
+
+
+
+.dialog-buttons-box {
+    margin-top: 15px;
+}
+
+
+.pinit-extension.icon-button {
+  margin: 5px;
+  margin-bottom: 20px;
+}
+
+.icon-button.selected-icon {
+    background-color: rgb(187, 187, 187); /* Darker background color */
+    /* Adjust other styles as needed to indicate selection */
 }
