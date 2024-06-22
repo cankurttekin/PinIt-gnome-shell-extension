@@ -48,20 +48,24 @@ class Dialog {
             hint_text: "Message",
         });
 
-        this.iconDropdown = new St.Button({
-            label: "Choose icon",
-            style_class: 'dialog-dropdown',
-            can_focus: true,
+
+	// Create a box layout to hold icons
+        this.iconBox = new St.BoxLayout({
+            //style_class: 'icon-box',
+            vertical: false,  // Horizontal layout
+            reactive: true,
+            track_hover: true,
         });
 
         this.iconMenu = new PopupMenu.PopupMenu(this.iconDropdown, 0.5, St.Side.TOP, 0);
         Main.uiGroup.add_actor(this.iconMenu.actor);
         this.iconMenu.actor.hide();
 
-        const iconNames = ['Pin', 'Calendar', 'Music', 'Information', 'Warning', 'Error'];
+        const iconNames = ['Pin', 'Calendar', 'Alarm', 'Music', 'Information', 'Warning', 'Error'];
         const iconMapping = {
             'Pin': 'view-pin-symbolic',
             'Calendar': 'office-calendar-symbolic',
+            'Alarm': 'alarm-symbolic',
             'Music': 'emblem-music-symbolic',
             'Information': 'dialog-information-symbolic',
             'Warning': 'dialog-warning-symbolic',
@@ -69,18 +73,23 @@ class Dialog {
         };
 
         this.selectedIcon = iconMapping['Pin'];
+        
         iconNames.forEach(iconName => {
-            let item = new PopupMenu.PopupMenuItem(iconName);
-            item.connect('activate', () => {
-                this.selectedIcon = iconMapping[iconName];
-                this.iconDropdown.label = iconName;
+            let iconButton = new St.Button({
+                style_class: 'pinit-extension icon-button',
+                child: new St.Icon({
+                    gicon: Gio.icon_new_for_string(iconMapping[iconName]),
+                    style_class: 'icons',
+                }),
             });
-            this.iconMenu.addMenuItem(item);
+
+            iconButton.connect('clicked', () => {
+                this.selectedIcon = iconMapping[iconName];
+                this._updateSelectedIcon(iconButton);
+            });
+            this.iconBox.add_child(iconButton);
         });
 
-        this.iconDropdown.connect('button-press-event', () => {
-            this.iconMenu.toggle();
-        });
 
         this.submitButton = new St.Button({
             label: "Submit",
@@ -89,18 +98,11 @@ class Dialog {
 
         this.submitButton.connect('clicked', this._onSubmit.bind(this));
 
-        this.cancelButton = new St.Button({
-            label: "Cancel",
-            style_class: 'dialog-button cancel-button',
-        });
-
-        this.cancelButton.connect('clicked', this._destroyDialog.bind(this));
-
+	this.dialog.add_child(this.iconBox); // Add the icon box instead of dropdown
         this.dialog.add_child(this.titleEntry);
         this.dialog.add_child(this.messageEntry);
-        this.dialog.add_child(this.iconDropdown);
+
         this.dialog.add_child(this.submitButton);
-        this.dialog.add_child(this.cancelButton);
         this.dialogOverlay.add_child(this.dialog);
 
         Main.layoutManager.addChrome(this.dialogOverlay);
@@ -119,6 +121,16 @@ class Dialog {
             Math.floor(Main.layoutManager.primaryMonitor.width / 2 - this.dialog.width / 2),
             50
         );
+        
+        global.stage.connect('captured-event', (actor, event) => {
+        // Check if the event happened outside of the dialog
+        if (event.type() === Clutter.EventType.BUTTON_PRESS) {
+            let [x, y] = event.get_coords();
+            if (!this.dialog.contains(global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x, y))) {
+                this._destroyDialog();
+            }
+        }
+    });
     }
 
     _applyThemeStyles() {
@@ -148,16 +160,34 @@ class Dialog {
         this._showNotification(title, message, iconName);
         this._destroyDialog();
     }
+    
+    _updateSelectedIcon(selectedButton) {
+        // Remove selection class from all buttons
+        this.iconBox.get_children().forEach(button => {
+            button.remove_style_class_name('selected-icon');
+        });
+                // Add selection class to the clicked button
+        selectedButton.add_style_class_name('selected-icon');
+    }
+    
+    
 
     _showNotification(title, message, iconName) {
+        //let extensionObject = Extension.lookupByUUID('pinit@cankurttekin');
+
+        
         let source = new MessageTray.Source(Me.metadata.name, iconName);
         Main.messageTray.add(source);
 
         let notificationIcon = new Gio.ThemedIcon({ name: iconName });
 
         let notification = new MessageTray.Notification(source, title, message, { gicon: notificationIcon });
-        notification.setTransient(true);
-        source.showNotification(notification);
+        notification.setTransient(false);
+       //notification.setResident(false);
+       notification.setUrgency('Urgency.LOW');
+
+       source.showNotification(notification);
+        
     }
 
     _destroyDialog() {
