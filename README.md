@@ -11,8 +11,10 @@ Click on tray icon, it will show up a dialog where you can input your notificati
 
 _Important: This extension does not log your notifications to a file; do not put information that you would care if it's lost._
 <br>
-_Due to the limit on the GNOME Shell, only the 3 most recent notifications are shown for every app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list)).<br>
-https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563_
+_Due to the limit on the GNOME Shell Version 45 & 46, only the 3 most recent notifications are shown for every app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list)).<br>
+https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563
+<br>
+For older GNOME Versions; you can add as many pins as you like._
 ## Version
 
 This extension supports GNOME Shell `3.4?` to `46`
