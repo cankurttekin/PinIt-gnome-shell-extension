@@ -11,7 +11,10 @@ Click on tray icon, it will show up a dialog where you can input your notificati
 
 _Important: This extension does not log your notifications to a file; do not put information that you would care if it's lost._
 <br>
-_Due to the limit on the GNOME Shell Version 45 & 46, only the 3 most recent notifications are shown for every app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list))._
+_Due to the limit on the GNOME Shell Version 45 & 46, only the 3 most recent notifications are shown for every app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list)).<br>
+https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563
+<br>
+For older GNOME Versions; you can add as many pins as you like._
 
 ## Version
 
@@ -19,7 +22,7 @@ This extension supports GNOME Shell `3.4?` to `46`
 
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| [master](https://github.com/cankurttekin/PinIt-Gnome-Extension)                  |    7  | GNOME 45 & 46          |
+| [main](https://github.com/cankurttekin/PinIt-Gnome-Extension)                  |    7  | GNOME 45 & 46          |
 | [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  [4.2](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases/tag/4.2)  | GNOME 3.4 -> 44        |
 
 _Tested on GNOME 42 & 46._
@@ -34,7 +37,6 @@ You can get this extension from [extensions.gnome.org](https://extensions.gnome.
 ![Screenshot_5](/screenshots/dialogdark.png)
 <br>
 ![Screenshot_3](/screenshots/notifications.png)
-
 
 # Contribute
 You can help with development by contributing code, testing on other GNOME versions and reporting issues.
