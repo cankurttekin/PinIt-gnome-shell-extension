@@ -19,13 +19,13 @@ This extension supports GNOME Shell `3.4?` to `46`
 
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| master                  |    7  | GNOME 45 & 46          |
-| gnome-shell-before-45   |  4.1  | GNOME 3.4 -> 44        |
+| [master](https://github.com/cankurttekin/PinIt-Gnome-Extension)                  |    7  | GNOME 45 & 46          |
+| [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  [4.2](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases/tag/4.2)  | GNOME 3.4 -> 44        |
 
 _Tested on GNOME 42 & 46._
 
 # Installing
-You can get this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/7083/pin-it/) or you can download the files and copy pinit@cankurttekin to your `/.local/share/gnome-shell/extensions/` directory.
+You can get this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/7083/pin-it/) or you can download the source from [releases](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases) and copy pinit@cankurttekin to your `/.local/share/gnome-shell/extensions/` directory.
 
 # Screenshots & Features
 ![Screenshot_1](/screenshots/tray.png)
