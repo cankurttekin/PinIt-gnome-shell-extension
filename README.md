@@ -15,20 +15,20 @@ _Due to the limit on the GNOME Shell Version 45 & 46, only the 3 most recent not
 https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563
 <br>
 For older GNOME Versions; you can add as many pins as you like._
+
 ## Version
 
 This extension supports GNOME Shell `3.4?` to `46`
 
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| master                  |    7  | GNOME 45 & 46          |
-| gnome-shell-before-45   |  4.1  | GNOME 3.4 -> 44        |
+| main                    |    7  | GNOME 45 & 46          |
+| [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  4.2  | GNOME 3.4 -> 44        |
 
 _Tested on GNOME 42 & 46._
 
 # Installing
-You can get this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/7083/pin-it/) or you can download the files and copy pinit@cankurttekin to your `/.local/share/gnome-shell/extensions/` directory.
-
+You can get this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/7083/pin-it/) or you can download the source from [releases](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases) and copy pinit@cankurttekin to your `/.local/share/gnome-shell/extensions/` directory.
 
 # Screenshots & Features
 ![Screenshot_1](/screenshots/tray.png)
@@ -40,7 +40,6 @@ You can get this extension from [extensions.gnome.org](https://extensions.gnome.
 <br>
 ![Screenshot_4](/screenshots/notificationsg42.png)
 <br>
-
 
 # Contribute
 You can help with development by contributing code, testing on other GNOME versions and reporting issues.
