@@ -4,7 +4,6 @@ const PanelMenu = imports.ui.panelMenu;
 const MessageTray = imports.ui.messageTray;
 const ExtensionUtils = imports.misc.extensionUtils;
 const PopupMenu = imports.ui.popupMenu;
-
 const Me = ExtensionUtils.getCurrentExtension();
 let PinIt;
 
@@ -40,19 +39,18 @@ class Dialog {
             style_class: 'dialog-entry',
             can_focus: true,
             hint_text: "Title",
+            track_hover: true,
         });
 
         this.messageEntry = new St.Entry({
             style_class: 'dialog-entry',
             can_focus: true,
             hint_text: "Message",
+            track_hover: true,
         });
 
-
-	// Create a box layout to hold icons
         this.iconBox = new St.BoxLayout({
-            //style_class: 'icon-box',
-            vertical: false,  // Horizontal layout
+            vertical: false,
             reactive: true,
             track_hover: true,
         });
@@ -90,7 +88,6 @@ class Dialog {
             this.iconBox.add_child(iconButton);
         });
 
-
         this.submitButton = new St.Button({
             label: "Submit",
             style_class: 'dialog-button submit-button',
@@ -98,10 +95,9 @@ class Dialog {
 
         this.submitButton.connect('clicked', this._onSubmit.bind(this));
 
-	this.dialog.add_child(this.iconBox); // Add the icon box instead of dropdown
+        this.dialog.add_child(this.iconBox);
         this.dialog.add_child(this.titleEntry);
         this.dialog.add_child(this.messageEntry);
-
         this.dialog.add_child(this.submitButton);
         this.dialogOverlay.add_child(this.dialog);
 
@@ -121,36 +117,64 @@ class Dialog {
             Math.floor(Main.layoutManager.primaryMonitor.width / 2 - this.dialog.width / 2),
             50
         );
+
+        this._outsideClickHandler = this._onOutsideClick.bind(this);
+        this._eventConnectionId = global.stage.connect('captured-event', this._outsideClickHandler);
+    }
+
+
+
         
-        global.stage.connect('captured-event', (actor, event) => {
-        // Check if the event happened outside of the dialog
+    _applyThemeStyles() {
+        const settings = ExtensionUtils.getSettings();
+        const themeMode = settings.get_string('theme-mode');
+        const gtkSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+        const gtkTheme = gtkSettings.get_string('gtk-theme');
+
+        if (themeMode === 'dark' || (themeMode === 'system' && gtkTheme.includes('dark'))) {
+            this.dialog.add_style_class_name('dialog-dark');
+            this.dialog.remove_style_class_name('dialog');
+            this.dialog.remove_style_class_name('dialog-oled');
+        } else if (themeMode === 'oled') {
+            this.dialog.add_style_class_name('dialog-oled');
+            this.dialog.remove_style_class_name('dialog-dark');
+            this.dialog.remove_style_class_name('dialog');
+        } else if (themeMode === 'light') {
+            this.dialog.add_style_class_name('dialog');
+            this.dialog.remove_style_class_name('dialog-dark');
+            this.dialog.remove_style_class_name('dialog-oled');
+        }  else {
+            if(gtkTheme.toLowerCase().includes('dark')) {
+            	this.dialog.add_style_class_name('dialog-dark');
+            	this.dialog.remove_style_class_name('dialog');
+            	this.dialog.remove_style_class_name('dialog-oled');
+            } else {
+            	this.dialog.add_style_class_name('dialog');
+            	this.dialog.remove_style_class_name('dialog-dark');
+            	this.dialog.remove_style_class_name('dialog-oled');
+            }
+            
+        }
+    }
+
+    _connectThemeChangeSignal() {
+        const gtkSettings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
+        gtkSettings.connect('changed::gtk-theme', () => {
+            this._applyThemeStyles();
+        });
+        const settings = ExtensionUtils.getSettings();
+        settings.connect('changed::theme-mode', () => {
+            this._applyThemeStyles();
+        });
+    }
+
+    _onOutsideClick(actor, event) {
         if (event.type() === Clutter.EventType.BUTTON_PRESS) {
             let [x, y] = event.get_coords();
             if (!this.dialog.contains(global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x, y))) {
                 this._destroyDialog();
             }
         }
-    });
-    }
-
-    _applyThemeStyles() {
-        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
-        const gtkTheme = settings.get_string('gtk-theme');
-
-        if (gtkTheme.includes('dark')) {
-            this.dialog.add_style_class_name('dialog-dark');
-            this.dialog.remove_style_class_name('dialog');
-        } else {
-            this.dialog.add_style_class_name('dialog');
-            this.dialog.remove_style_class_name('dialog-dark');
-        }
-    }
-
-    _connectThemeChangeSignal() {
-        const settings = new Gio.Settings({ schema: 'org.gnome.desktop.interface' });
-        settings.connect('changed::gtk-theme', () => {
-            this._applyThemeStyles();
-        });
     }
 
     _onSubmit() {
@@ -160,22 +184,15 @@ class Dialog {
         this._showNotification(title, message, iconName);
         this._destroyDialog();
     }
-    
+
     _updateSelectedIcon(selectedButton) {
-        // Remove selection class from all buttons
         this.iconBox.get_children().forEach(button => {
             button.remove_style_class_name('selected-icon');
         });
-                // Add selection class to the clicked button
         selectedButton.add_style_class_name('selected-icon');
     }
-    
-    
 
     _showNotification(title, message, iconName) {
-        //let extensionObject = Extension.lookupByUUID('pinit@cankurttekin');
-
-        
         let source = new MessageTray.Source(Me.metadata.name, iconName);
         Main.messageTray.add(source);
 
@@ -183,21 +200,24 @@ class Dialog {
 
         let notification = new MessageTray.Notification(source, title, message, { gicon: notificationIcon });
         notification.setTransient(false);
-       //notification.setResident(false);
-       notification.setUrgency('Urgency.LOW');
+        notification.setUrgency('Urgency.LOW');
 
-       source.showNotification(notification);
-        
+        source.showNotification(notification);
     }
 
     _destroyDialog() {
+        if (this._eventConnectionId) {
+            global.stage.disconnect(this._eventConnectionId);
+            this._eventConnectionId = null;
+        }
+
         this.dialogOverlay.ease({
             opacity: 0,
             duration: 250,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             onComplete: () => {
                 this.dialogOverlay.destroy();
-                Dialog.instance = null; // Reset singleton instance
+                Dialog.instance = null;
             }
         });
     }

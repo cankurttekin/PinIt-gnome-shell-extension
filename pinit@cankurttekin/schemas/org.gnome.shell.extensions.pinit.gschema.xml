@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.pinit" path="/org/gnome/shell/extensions/pinit/">
+    <key name="theme-mode" type="s">
+      <default>'system'</default>
+      <summary>Theme Mode</summary>
+      <description>Theme mode for the extension: dark, light, or system.</description>
+    </key>
+  </schema>
+</schemalist>
+
