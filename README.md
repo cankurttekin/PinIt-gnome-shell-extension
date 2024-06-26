@@ -37,6 +37,8 @@ You can get this extension from [extensions.gnome.org](https://extensions.gnome.
 ![Screenshot_5](/screenshots/dialogdark.png)
 <br>
 ![Screenshot_3](/screenshots/notifications.png)
+<br>
+![Screenshot_4](/screenshots/settings.png)
 
 # Contribute
 You can help with development by contributing code, testing on other GNOME versions and reporting issues.
