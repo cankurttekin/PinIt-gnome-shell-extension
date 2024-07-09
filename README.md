@@ -22,8 +22,8 @@ This extension supports GNOME Shell `3.4?` to `46`
 
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| [main](https://github.com/cankurttekin/PinIt-Gnome-Extension)                  |    7  | GNOME 45 & 46          |
-| [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  [4.2](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases/tag/4.2)  | GNOME 3.4 -> 44        |
+| [main](https://github.com/cankurttekin/PinIt-Gnome-Extension)                  |    12  | GNOME 45 & 46          |
+| [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  [4.3](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases/tag/4.3)  | GNOME 3.4 -> 44        |
 
 _Tested on GNOME 42 & 46._
 
@@ -38,7 +38,6 @@ You can get this extension from [extensions.gnome.org](https://extensions.gnome.
 <br>
 ![Screenshot_3](/screenshots/notifications.png)
 <br>
-![Screenshot_4](/screenshots/settings.png)
 
 # Contribute
 You can help with development by contributing code, testing on other GNOME versions and reporting issues.
