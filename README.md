@@ -31,13 +31,13 @@ _Tested on GNOME 42 & 46._
 You can get this extension from [extensions.gnome.org](https://extensions.gnome.org/extension/7083/pin-it/) or you can download the source from [releases](https://github.com/cankurttekin/PinIt-Gnome-Extension/releases) and copy pinit@cankurttekin to your `/.local/share/gnome-shell/extensions/` directory.
 
 # Screenshots & Features
-![Screenshot_1](/screenshots/tray.png)
-<br>
 ![Screenshot_2](/screenshots/dialog.png)
 ![Screenshot_5](/screenshots/dialogdark.png)
 <br>
+#### GNOME Shell Version 46
 ![Screenshot_3](/screenshots/notifications.png)
 <br>
+#### GNOME Shell Version 42
 ![Screenshot_4](/screenshots/notificationsg42.png)
 <br>
 
