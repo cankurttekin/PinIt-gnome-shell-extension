@@ -1,13 +1,24 @@
 # Pin It GNOME Extension
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  <br>
- GNOME Shell Extension to add your simple notes to the notification area.
+
+
+ <p align="center">
+  <img height="64" width="64"  src="resources/pinit-ext-icon.png">
+</p>
+
+<h1 align="center">
+  PinIt!
+</h1>
+
+> _GNOME Shell Extension to add your simple notes to the notification area._ 
+
+[<img src="/resources/get_it_on_gnome_extensions.png"
+     alt="Get it on GNOME Extensions"
+     height="128">](https://extensions.gnome.org/extension/7083/pin-it/)
+
  
 Click on tray icon, it will show up a dialog where you can input your notification title, message and optionally icon(default will be same as the extension icon).
-
-<br>
-
-[<img src="/resources/get_it_on_gnome_extensions.png">](https://extensions.gnome.org/extension/7083/pin-it/)
 
 _Important: This extension does not log your notifications to a file; do not put information that you would care if it's lost._
 <br>
