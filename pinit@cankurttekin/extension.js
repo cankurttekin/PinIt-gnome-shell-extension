@@ -38,8 +38,9 @@ const Pin = GObject.registerClass(
             // Create icon buttons and add them to the box layout
             iconNames.forEach(iconName => {
                 let iconButton = new St.Button({
-                    style_class: 'quick-settings icon-button',
-                    style: 'margin: 4px;',
+                   style_class: 'button',
+                   style: 'border-radius: 50px; width: 36px; height: 36px; padding: 8px; margin: 4px;',
+                   track_hover: true,
                     child: new St.Icon({
                         gicon: Gio.icon_new_for_string(iconMapping[iconName]),
                         can_focus: true,
@@ -77,34 +78,18 @@ const Pin = GObject.registerClass(
             });
             vbox2.add_child(this.messageEntry);
             
-            let submitIcon = new St.Icon({
-                gicon: Gio.icon_new_for_string('view-pin-symbolic'),
-                style_class: 'system-status-icon'
-            });
-            
-            // Create a label
-            let submitLabel = new St.Label({
-                text: ' Pin It',
-                style_class: 'system-menu-action'
-            });
-            
-            // Create a box layout to contain both icon and label
-            let submitBox = new St.BoxLayout({
-                style_class: 'icon-label-box',
-                vertical: false,
-                reactive: true,
-                track_hover: true,
-            });
-            submitBox.add_child(submitIcon);
-            submitBox.add_child(submitLabel);
             
             // Create the button with the icon and label
             let submitButton = new St.Button({
-                style_class: 'icon-button', // Use GNOME Shell style class for button
-                child: submitBox, // Use the box layout containing icon and label as the child
+                //style_class: 'icon-button', // Use GNOME Shell style class for button
                 x_align: Clutter.ActorAlign.END,
                 can_focus: true,
-                style: 'margin-top: 8px;'
+                style: 'margin-top: 8px; border-radius: 50px;',
+                style_class: 'button',
+                //vertical: false,
+                reactive: true,
+                track_hover: true,
+                label: ' Pin It',
             });
             
             // Connect click event handler
