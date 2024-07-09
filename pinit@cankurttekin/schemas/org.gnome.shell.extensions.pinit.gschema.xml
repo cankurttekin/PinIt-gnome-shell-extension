@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+
   <schema id="org.gnome.shell.extensions.pinit" path="/org/gnome/shell/extensions/pinit/">
-    <key name="theme-mode" type="s">
-      <default>'system'</default>
-      <summary>Theme Mode</summary>
-      <description>Theme mode for the extension: dark, light, or system.</description>
+
+    <key type="s" name="title">
+      <default>"title"</default>
+      <summary>The title that is for notification.</summary>
+    </key>
+    
+        <key type="s" name="message">
+      <default>"Message"</default>
+      <summary>The message body that is shown on notification.</summary>
     </key>
   </schema>
 </schemalist>
-
