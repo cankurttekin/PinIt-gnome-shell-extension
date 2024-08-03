@@ -138,8 +138,12 @@ const Pin = GObject.registerClass(
         _showNotification(title, message, iconName) {
             let extensionObject = Extension.lookupByUUID('pinit@cankurttekin');
             let notificationIcon = new Gio.ThemedIcon({ name: iconName });
+            
+            let source = new MessageTray.Source({
+                title: _('PinIt'),
+                iconName: 'view-pin-symbolic',
+            });
 
-            let source = MessageTray.getSystemSource();
             let notification = new MessageTray.Notification({
                 source: source,
                 title: title,
@@ -148,6 +152,11 @@ const Pin = GObject.registerClass(
                 isTransient: true,
                 urgency: MessageTray.Urgency.LOW,
             });
+            // Reset the notification source if it's destroyed
+            source.connect('destroy', _source => {
+                source = null;
+            });
+            Main.messageTray.add(source);
             source.addNotification(notification);
         }
     }
