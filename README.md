@@ -45,12 +45,9 @@ You can get this extension from [extensions.gnome.org](https://extensions.gnome.
 ![Screenshot_2](/screenshots/dialog.png)
 ![Screenshot_5](/screenshots/dialogdark.png)
 <br>
-#### GNOME Shell Version 46
 ![Screenshot_3](/screenshots/notifications.png)
 <br>
-#### GNOME Shell Version 42
-![Screenshot_4](/screenshots/notificationsg42.png)
-<br>
+
 
 # Contribute
 You can help with development by contributing code, testing on other GNOME versions and reporting issues.
