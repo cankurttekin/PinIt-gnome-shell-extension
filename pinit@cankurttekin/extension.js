@@ -36,7 +36,7 @@ const Pin = GObject.registerClass(
                 'Error': 'dialog-error-symbolic'
             };
             this.selectedIcon = iconMapping['Pin'];
-            
+            let activeButton = null;
             // Create icon buttons and add them to the box layout
             iconNames.forEach(iconName => {
                 let iconButton = new St.Button({
@@ -49,6 +49,15 @@ const Pin = GObject.registerClass(
                 });
                 iconButton.connect('clicked', () => {
                     this.selectedIcon = iconMapping[iconName];
+
+                    if (activeButton) {
+                        activeButton.remove_style_class_name('flat');
+                    }
+
+                    iconButton.add_style_class_name('flat');
+
+                    // Update the active button reference
+                    activeButton = iconButton;
                 });
                 this.iconBox.add_child(iconButton);
             });
