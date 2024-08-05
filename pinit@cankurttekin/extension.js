@@ -41,7 +41,7 @@ const Pin = GObject.registerClass(
             iconNames.forEach(iconName => {
                 let iconButton = new St.Button({
                     style_class: 'quick-settings icon-button',
-                    style: 'margin: 4px;',
+                    style: 'margin: 4px; margin-top: 8px;',
                     child: new St.Icon({
                         gicon: Gio.icon_new_for_string(iconMapping[iconName]),
                         can_focus: true,
@@ -66,7 +66,7 @@ const Pin = GObject.registerClass(
                 hint_text: "Title",
                 can_focus: true,
                 track_hover: true,
-                style: 'margin-top: 8px;'
+                style: 'margin-left: 8px; margin-right: 8px; margin-top: 8px;'
             });
 
             let vbox1 = new St.BoxLayout({
@@ -79,7 +79,7 @@ const Pin = GObject.registerClass(
                 hint_text: "Message",
                 can_focus: true,
                 track_hover: true,
-                style: 'margin-top: 8px;',
+                style: 'margin-left: 8px; margin-right: 8px; margin-top: 8px;',
             });
 
             let vbox2 = new St.BoxLayout({
@@ -115,7 +115,7 @@ const Pin = GObject.registerClass(
                 child: submitBox, // Use the box layout containing icon and label as the child
                 x_align: Clutter.ActorAlign.END,
                 can_focus: true,
-                style: 'margin-top: 8px;'
+                style: 'margin-top: 8px; margin-bottom: 8px; margin-right: 8px; '
             });
             
             // Connect click event handler
