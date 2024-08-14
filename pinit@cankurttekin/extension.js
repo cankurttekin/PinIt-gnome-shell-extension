@@ -12,10 +12,10 @@ import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 const Pin = GObject.registerClass(
     class Pin extends PanelMenu.Button {
         _init(settings) {
-            super._init(0.0, _('test'));
+            super._init(0.0, _('PinIt'));
             
             this._icon = new St.Icon({
-                icon_name: 'view-pin-symbolic', // Change icon to a note symbol
+                icon_name: 'view-pin-symbolic',
                 style_class: 'system-status-icon',
             });
             this.add_child(this._icon);
