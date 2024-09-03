@@ -18,14 +18,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Extract version from metadata.json
+      id: extract_version
+      run: |
+        VERSION=$(jq -r '.version' pinit@cankurttekin/metadata.json)
+        echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+
     - name: Zip the pinit@cankurttekin directory
       run: zip -r pinit@cankurttekin.zip pinit@cankurttekin
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ github.run_number }}
+        tag_name: v${{ env.RELEASE_VERSION }}
         body: "This release was automatically generated and might be untested."
-        files: pinit-cankurttekin.zip
+        files: pinit@cankurttekin.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
