@@ -1,0 +1,31 @@
+name: Create Release with ZIP
+
+on:
+  push:
+    paths:
+      - 'pinit@cankurttekin/**'
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Zip the pinit@cankurttekin directory
+      run: zip -r pinit@cankurttekin.zip pinit@cankurttekin
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }}
+        body: "This release was automatically generated and might be untested."
+        files: pinit-cankurttekin.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
