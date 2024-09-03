@@ -1,3 +1,21 @@
+/* extension.js
+ *
+ * PinIt GNOME Shell Extension is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PinIt GNOME Shell Extension is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PinIt GNOME Shell Extension.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * License: GPL-3.0
+ */
+
 import GObject from 'gi://GObject';
 import St from 'gi://St';
 import Clutter from 'gi://Clutter';
@@ -9,98 +27,110 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
+// System icon names mapping
+const ICON_MAPPING = {
+    'Pin': 'view-pin-symbolic',
+    'Calendar': 'x-office-calendar-symbolic',
+    'Music': 'emblem-music-symbolic',
+    'Alarm': 'alarm-symbolic',
+    'Information': 'dialog-information-symbolic',
+    'Warning': 'dialog-warning-symbolic',
+    'Error': 'dialog-error-symbolic'
+};
+
 const Pin = GObject.registerClass(
     class Pin extends PanelMenu.Button {
         _init(settings) {
             super._init(0.0, _('PinIt'));
-            
+
+            // Create a system tray icon
             this._icon = new St.Icon({
-                icon_name: 'view-pin-symbolic',
+                icon_name: ICON_MAPPING['Pin'],
                 style_class: 'system-status-icon',
             });
             this.add_child(this._icon);
             
-            this.iconBox = new St.BoxLayout({
+            // Create extension functionality UI elements
+            this.iconBox = this._createIconBox();
+            this.titleEntry = this._createEntry(_("Title"));
+            this.messageEntry = this._createEntry(_("Message"));
+
+            const submitButton = this._createSubmitButton();
+
+            // Create vertical box and add pop-up menu ui elements
+            const vbox = new St.BoxLayout({
+                vertical: true,
+                style_class: 'popup-menu-box'
+            });
+            vbox.add_child(this.iconBox);
+            vbox.add_child(this.titleEntry);
+            vbox.add_child(this.messageEntry);
+            vbox.add_child(submitButton);
+            
+            const popupEdit = new PopupMenu.PopupMenuSection();
+            popupEdit.actor.add_child(vbox);
+            this.menu.addMenuItem(popupEdit);
+            this.menu.actor.add_style_class_name('note-entry');
+            
+            // Default selection of notification icon
+            this.selectedIcon = ICON_MAPPING['Pin'];
+        }
+        
+        _createIconBox() {
+            const box = new St.BoxLayout({
                 x_align: Clutter.ActorAlign.CENTER,
                 vertical: false,
             });
 
-            const iconNames = ['Pin', 'Calendar', 'Music', 'Alarm', 'Information', 'Warning', 'Error'];
-            const iconMapping = {
-                'Pin': 'view-pin-symbolic',
-                'Calendar': 'x-office-calendar-symbolic',
-                'Music': 'emblem-music-symbolic',
-                'Alarm': 'alarm-symbolic',
-                'Information': 'dialog-information-symbolic',
-                'Warning': 'dialog-warning-symbolic',
-                'Error': 'dialog-error-symbolic'
-            };
-            this.selectedIcon = iconMapping['Pin'];
-            let activeButton = null;
-            // Create icon buttons and add them to the box layout
-            iconNames.forEach(iconName => {
-                let iconButton = new St.Button({
-                    style_class: 'quick-settings icon-button',
-                    style: 'margin: 4px; margin-top: 8px;',
-                    child: new St.Icon({
-                        gicon: Gio.icon_new_for_string(iconMapping[iconName]),
-                        can_focus: true,
-                    }),
-                });
-                iconButton.connect('clicked', () => {
-                    this.selectedIcon = iconMapping[iconName];
-
-                    if (activeButton) {
-                        activeButton.remove_style_class_name('flat');
-                    }
-
-                    iconButton.add_style_class_name('flat');
-
-                    // Update the active button reference
-                    activeButton = iconButton;
-                });
-                this.iconBox.add_child(iconButton);
+            // Adding notification icon buttons from mapping
+            Object.keys(ICON_MAPPING).forEach(iconName => {
+                const iconButton = this._createIconButton(iconName);
+                box.add_child(iconButton);
             });
-            
-            this.titleEntry = new St.Entry({
-                hint_text: "Title",
+            return box;
+        }
+        
+        _createIconButton(iconName) {
+            const iconButton = new St.Button({
+                style_class: 'quick-settings icon-button',
+                style: 'margin: 4px; margin-top: 8px;',
+                child: new St.Icon({
+                    gicon: Gio.icon_new_for_string(ICON_MAPPING[iconName]),
+                    can_focus: true,
+                }),
+            });
+
+            // Click handler for button
+            iconButton.connect('clicked', () => {
+                this.selectedIcon = ICON_MAPPING[iconName];
+                this._updateActiveButton(iconButton);
+            });
+            return iconButton;
+        }
+        
+        // Create text field with hint
+        _createEntry(hintText) {
+            return new St.Entry({
+                hint_text: hintText,
                 can_focus: true,
                 track_hover: true,
-                style: 'margin-left: 8px; margin-right: 8px; margin-top: 8px;'
+                style: 'margin: 8px;'
             });
-
-            let vbox1 = new St.BoxLayout({
-                vertical: true,
-                style_class: 'popup-menu-box'
-            });
-            vbox1.add_child(this.titleEntry);
-
-            this.messageEntry = new St.Entry({
-                hint_text: "Message",
-                can_focus: true,
-                track_hover: true,
-                style: 'margin-left: 8px; margin-right: 8px; margin-top: 8px;',
-            });
-
-            let vbox2 = new St.BoxLayout({
-                vertical: true,
-                style_class: 'popup-menu-box'
-            });
-            vbox2.add_child(this.messageEntry);
-            
-            let submitIcon = new St.Icon({
-                gicon: Gio.icon_new_for_string('view-pin-symbolic'),
+        }
+        
+        // Submit button with icon and label
+        _createSubmitButton() {
+            const submitIcon = new St.Icon({
+                gicon: Gio.icon_new_for_string(ICON_MAPPING['Pin']),
                 style_class: 'system-status-icon'
             });
-            
-            // Create a label
-            let submitLabel = new St.Label({
+
+            const submitLabel = new St.Label({
                 text: ' Pin It',
                 style_class: 'system-menu-action'
             });
-            
-            // Create a box layout to contain both icon and label
-            let submitBox = new St.BoxLayout({
+
+            const submitBox = new St.BoxLayout({
                 style_class: 'icon-label-box',
                 vertical: false,
                 reactive: true,
@@ -108,52 +138,44 @@ const Pin = GObject.registerClass(
             });
             submitBox.add_child(submitIcon);
             submitBox.add_child(submitLabel);
-            
-            // Create the button with the icon and label
-            let submitButton = new St.Button({
-                style_class: 'icon-button', // Use GNOME Shell style class for button
-                child: submitBox, // Use the box layout containing icon and label as the child
+
+            const submitButton = new St.Button({
+                style_class: 'icon-button',
+                child: submitBox,
                 x_align: Clutter.ActorAlign.END,
                 can_focus: true,
-                style: 'margin-top: 8px; margin-bottom: 8px; margin-right: 8px; '
+                style: 'margin: 8px;',
             });
-            
-            // Connect click event handler
+
+            // Click handler for the submit button
             submitButton.connect('clicked', () => {
-                let title = this.titleEntry.get_text();
-                let message = this.messageEntry.get_text();
-                let iconName = this.selectedIcon;
+                const title = this.titleEntry.get_text();
+                const message = this.messageEntry.get_text();
+                const iconName = this.selectedIcon;
                 this._showNotification(title, message, iconName);
                 this.titleEntry.set_text('');
                 this.messageEntry.set_text('');
             });
-            
-
-            // Create a vertical box layout to arrange components vertically
-            let vbox = new St.BoxLayout({
-                vertical: true,
-                style_class: 'popup-menu-box'
-            });
-            vbox.add_child(this.iconBox);
-            vbox.add_child(vbox1);
-            vbox.add_child(vbox2);
-            vbox.add_child(submitButton);
-            let popupEdit = new PopupMenu.PopupMenuSection();
-            popupEdit.actor.add_child(vbox);
-            this.menu.addMenuItem(popupEdit);
-            this.menu.actor.add_style_class_name('note-entry');
+            return submitButton;
         }
         
+        _updateActiveButton(button) {
+            if (this.activeButton) {
+                this.activeButton.remove_style_class_name('flat');
+            }
+            button.add_style_class_name('flat');
+            this.activeButton = button;
+        }
+        
+        // Creating notification with title, message and icon
         _showNotification(title, message, iconName) {
-            let extensionObject = Extension.lookupByUUID('pinit@cankurttekin');
-            let notificationIcon = new Gio.ThemedIcon({ name: iconName });
-            
-            let source = new MessageTray.Source({
+            const notificationIcon = new Gio.ThemedIcon({ name: iconName });
+            const source = new MessageTray.Source({
                 title: _('PinIt'),
                 iconName: 'view-pin-symbolic',
             });
 
-            let notification = new MessageTray.Notification({
+            const notification = new MessageTray.Notification({
                 source: source,
                 title: title,
                 body: message,
@@ -161,10 +183,12 @@ const Pin = GObject.registerClass(
                 isTransient: true,
                 urgency: MessageTray.Urgency.LOW,
             });
-            // Reset the notification source if it's destroyed
-            source.connect('destroy', _source => {
+
+            // Cleaning of message source when destroyed
+            source.connect('destroy', () => {
                 source = null;
             });
+
             Main.messageTray.add(source);
             source.addNotification(notification);
         }
