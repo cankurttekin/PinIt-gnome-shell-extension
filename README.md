@@ -1,7 +1,7 @@
 # Pin It GNOME Extension
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  <br>
-
+[![Zip and Release](https://github.com/cankurttekin/PinIt-gnome-shell-extension/actions/workflows/zip-and-release.yml/badge.svg?branch=main)](https://github.com/cankurttekin/PinIt-gnome-shell-extension/actions/workflows/zip-and-release.yml)
 
  <p align="center">
   <img height="64" width="64"  src="resources/pinit-ext-icon.png">
