@@ -31,7 +31,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ env.RELEASE_VERSION }}
-        body: "This release was automatically generated and might be untested."
+        body: "This release was automatically generated, might be untested and only FOR GNOME 45 & 46."
         files: pinit@cankurttekin.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
