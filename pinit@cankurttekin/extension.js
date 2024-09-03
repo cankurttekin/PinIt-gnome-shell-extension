@@ -57,7 +57,7 @@ const Pin = GObject.registerClass(
 
             const submitButton = this._createSubmitButton();
 
-            // Create vertical box and add pop-up menu ui elements
+            // Create vertical box and add pop-up menu UI elements to it
             const vbox = new St.BoxLayout({
                 vertical: true,
                 style_class: 'popup-menu-box'
@@ -72,7 +72,7 @@ const Pin = GObject.registerClass(
             this.menu.addMenuItem(popupEdit);
             this.menu.actor.add_style_class_name('note-entry');
             
-            // Default selection of notification icon
+            // Setting default notification icon
             this.selectedIcon = ICON_MAPPING['Pin'];
         }
         
@@ -82,7 +82,7 @@ const Pin = GObject.registerClass(
                 vertical: false,
             });
 
-            // Adding notification icon buttons from mapping
+            // Adding notification icon buttons from ICON_MAPPING to icon box
             Object.keys(ICON_MAPPING).forEach(iconName => {
                 const iconButton = this._createIconButton(iconName);
                 box.add_child(iconButton);
@@ -100,7 +100,7 @@ const Pin = GObject.registerClass(
                 }),
             });
 
-            // Click handler for button
+            // Click handler for icon buttons
             iconButton.connect('clicked', () => {
                 this.selectedIcon = ICON_MAPPING[iconName];
                 this._updateActiveButton(iconButton);
