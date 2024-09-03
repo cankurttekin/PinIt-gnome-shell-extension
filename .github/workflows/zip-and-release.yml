@@ -1,4 +1,4 @@
-name: Create Release with ZIP
+name: Zip and Release
 
 on:
   push:
