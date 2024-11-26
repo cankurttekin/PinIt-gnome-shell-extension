@@ -29,7 +29,7 @@ https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563~~
 ## Version
 |Branch                   |Version|Compatible GNOME version|
 |-------------------------|:-----:|------------------------|
-| main                    |    15 | GNOME 45 & 46          |
+| main                    |    17 | GNOME 45 & 46          |
 | [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  4.2  | GNOME 3.4 -> 44        |
 <br>
 This extension supports GNOME Shell `3.4?` to `46`
