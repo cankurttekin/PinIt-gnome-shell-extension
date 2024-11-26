@@ -23,7 +23,7 @@ _**Important**: This extension does not log your notifications to a file or syst
 <br><br>
 _~~Due to the limit on the GNOME Shell Version 45 & 46, only the 3 most recent notifications are shown per app, "so notifications can disappear before you have a chance to act on them"([blogs.gnome.org](https://blogs.gnome.org/shell-dev/2024/04/23/notifications-46-and-beyond/#A-single-messy-list)). <br> 
 https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563~~
-<br>With this [commit](https://github.com/cankurttekin/PinIt-Gnome-Extension/commit/5c51d91dbca739858022900b40600432e2194c09) extension creates custom source so you can send unlimited notifications on GNOME Shell 45 & 46 just like PinIt for older GNOME versions_ <br>
+<br>With this [commit](https://github.com/cankurttekin/PinIt-Gnome-Extension/commit/5c51d91dbca739858022900b40600432e2194c09) extension creates custom source so you can send unlimited notifications on GNOME Shell 45, 46 & 47 just like PinIt for older GNOME versions_ <br>
 
 
 ## Version
@@ -32,7 +32,7 @@ https://gitlab.gnome.org/GNOME/gnome-shell/blob/main/js/ui/messageTray.js#L563~~
 | main                    |    17 | GNOME 45 & 46          |
 | [gnome-shell-before-45](https://github.com/cankurttekin/PinIt-Gnome-Extension/tree/gnome-shell-before-45)   |  4.2  | GNOME 3.4 -> 44        |
 <br>
-This extension supports GNOME Shell `3.4?` to `46`
+This extension supports GNOME Shell `3.4?` to `47`
 
 _Tested on GNOME 42 & 46._
 
