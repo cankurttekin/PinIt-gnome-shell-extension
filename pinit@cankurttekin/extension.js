@@ -142,10 +142,11 @@ const Pin = GObject.registerClass(
             const submitButton = new St.Button({
                 style_class: 'icon-button',
                 child: submitBox,
-                x_align: Clutter.ActorAlign.END,
+                //x_align: Clutter.ActorAlign.END,
                 can_focus: true,
                 style: 'margin: 8px;',
             });
+            // submitButton.add_style_class_name('button-accent'); 
 
             // Click handler for the submit button
             submitButton.connect('clicked', () => {
@@ -161,9 +162,9 @@ const Pin = GObject.registerClass(
         
         _updateActiveButton(button) {
             if (this.activeButton) {
-                this.activeButton.remove_style_class_name('flat');
+                this.activeButton.remove_style_class_name('button-accent');
             }
-            button.add_style_class_name('flat');
+            button.add_style_class_name('button-accent');
             this.activeButton = button;
         }
         
