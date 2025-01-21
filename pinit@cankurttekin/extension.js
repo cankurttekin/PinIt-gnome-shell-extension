@@ -117,7 +117,7 @@ const Pin = GObject.registerClass(
                 hint_text: hintText,
                 can_focus: true,
                 track_hover: true,
-                style: 'margin: 8px;'
+                style: 'margin: 4px;'
             });
         }
 
@@ -153,10 +153,10 @@ const Pin = GObject.registerClass(
                 //label: `${delayOptions[currentDelayIndex]}`,
                 child: delayBox,
                 style_class: 'quick-settings icon-button',
-                style: 'margin: 4px; margin-top: 8px;',
+                style: 'margin: 4px; margin-bottom: 8px;',
                 can_focus: true,
                 x_expand: true,
-                x_align: Clutter.ActorAlign.START,
+                //x_align: Clutter.ActorAlign.START,
             });
 
             delayButton.connect('clicked', () => {
@@ -172,7 +172,7 @@ const Pin = GObject.registerClass(
             });
 
             const submitLabel = new St.Label({
-                text: ' Pin It',
+                text: ' Pin It ',
                 style_class: 'system-menu-action'
             });
 
@@ -190,8 +190,8 @@ const Pin = GObject.registerClass(
                 style_class: 'icon-button',
                 child: submitBox,
                 can_focus: true,
-                style: 'margin: 8px;',
-                x_align: Clutter.ActorAlign.END,
+                style: 'margin: 4px; margin-bottom: 8px;',
+                //x_align: Clutter.ActorAlign.END,
             });
 
             // Handle notification submission with delay
@@ -212,7 +212,7 @@ const Pin = GObject.registerClass(
             });
 
             // Combine delay button and submit button
-            const buttonBox = new St.BoxLayout({ vertical: false, x_expand: true });
+            const buttonBox = new St.BoxLayout({ vertical: false, x_expand: true, x_align: Clutter.ActorAlign.END, });
             buttonBox.add_child(delayButton);
             buttonBox.add_child(submitButton);
 
