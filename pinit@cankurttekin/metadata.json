@@ -1,13 +1,14 @@
 {
-  "description": "Send yourself custom notifications. Can be used as quick reminder, to-do or anything you would want to see as notification. Simply type your title, message and optionally choose icon and click Pin It to send notification to yourself. With cycling button on bottom left you can set when to recieve notification. Important: Do not put any important information you would not want to loose, notifications can disappear before you have a chance to act on them. Please report bugs or useful feature requests to GitHub repository below.",
+  "description": "Send yourself custom notifications. Can be used as quick reminder, to-do or anything you would want to see as notification. Simply type your title, message and optionally choose icon and click Pin It to send notification to yourself. With timer button you can choose when to receive notification. Important: Do not put any important information you would not want to loose, notifications can disappear before you have a chance to act on them. Please report bugs or useful feature requests to GitHub repository below.",
   "name": "Pin It",
   "settings-schema": "org.gnome.shell.extensions.pinit",
   "shell-version": [
     "45",
     "46",
-    "47"
+    "47",
+    "48"
   ],
   "url": "https://github.com/cankurttekin/PinIt-Gnome-Extension",
   "uuid": "pinit@cankurttekin",
-  "version": 19
+  "version": 20
 }
